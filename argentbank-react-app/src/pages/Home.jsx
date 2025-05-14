@@ -4,8 +4,11 @@ import iconSecurity from "../img/icon-security.webp";
 import FeatureItem from "../components/featureItem";
 
 function Home() {
+  const main = document.querySelector("main");
+  main.removeAttribute("class");
+
   return (
-    <main>
+    <>
       <div className="hero">
         <section className="hero-content">
           <h2 className="sr-only">Promoted Content</h2>
@@ -35,7 +38,7 @@ function Home() {
             is always safe."
         />
       </section>
-    </main>
+    </>
   );
 }
 

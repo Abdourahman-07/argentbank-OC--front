@@ -15,6 +15,8 @@ body {
 
 .main {
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .bg-dark {
@@ -35,11 +37,16 @@ body {
   white-space: nowrap !important; /* 3 */
 }
 
+.error-message {
+  color: red;
+}
+
 .main-nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 5px 20px;
+  background-color: white;
 }
 
 .main-nav a {
@@ -207,6 +214,8 @@ body {
   justify-content: center;
   border-top: 2px solid #ccc;
   padding: 2rem 0 1.5rem;
+  margin-top: auto;
+  background-color: white;
 }
 
 .footer-text {

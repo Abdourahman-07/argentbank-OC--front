@@ -1,33 +1,79 @@
-import { Link } from "react-router-dom";
+import { getResponseLogin, getUserProfile } from "../api.jsx";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setToken, setProfile } from "../storeUser.jsx";
 
-function SignIn(path) {
+function SignIn() {
+  const dispatch = useDispatch();
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
+  const main = document.querySelector("main");
+  main.classList.add("main", "bg-dark");
+
+  async function loginUser(token) {
+    const profile = await getUserProfile(token);
+    dispatch(setToken(token));
+    dispatch(setProfile(profile.body));
+    navigate("/tableau-de-bord");
+  }
+
+  async function checkLoginUser(event) {
+    event.preventDefault();
+    const email = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    if (email === "" || password === "") {
+      setErrorMessage("Veuillez remplir tous les champs");
+    } else {
+      try {
+        const response = await getResponseLogin(email, password);
+        const token = response.body.token;
+        loginUser(token);
+      } catch (error) {
+        switch (error.message) {
+          case "Cannot read properties of undefined (reading 'token')":
+            setErrorMessage("Échec de l'authentification");
+            break;
+          case "response.body is undefined":
+            setErrorMessage("Échec de l'authentification");
+            break;
+          case "Failed to fetch":
+            setErrorMessage("La connexion a échoué");
+            break;
+          default:
+            setErrorMessage("Erreur inconnue");
+        }
+      }
+    }
+  }
+
   return (
-    <main className="main bg-dark">
+    <>
       <section className="sign-in-content">
         <i className="fa fa-user-circle sign-in-icon"></i>
         <h1>Sign In</h1>
-        <form>
+        <form onSubmit={checkLoginUser}>
           <div className="input-wrapper">
-            <label for="username">Username</label>
+            <label htmlFor="username">Username</label>
             <input type="text" id="username" />
           </div>
           <div className="input-wrapper">
-            <label for="password">Password</label>
+            <label htmlFor="password">Password</label>
             <input type="password" id="password" />
           </div>
           <div className="input-remember">
             <input type="checkbox" id="remember-me" />
-            <label for="remember-me">Remember me</label>
+            <label htmlFor="remember-me">Remember me</label>
           </div>
-          {/* PLACEHOLDER DUE TO STATIC SITE */}
-          <Link to="/tableau-de-bord" className="sign-in-button">
-            {path === "/tableau-de-bord" ? "Sign Out" : "Sign In"}
-          </Link>
-          {/* SHOULD BE THE BUTTON BELOW */}
-          {/* <button className="sign-in-button">Sign In</button> */}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <button type="submit" className="sign-in-button">
+            Sign In
+          </button>
         </form>
       </section>
-    </main>
+    </>
   );
 }
 
