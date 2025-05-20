@@ -25,11 +25,16 @@ function Header() {
       </Link>
       <div>
         {isAuthenticated ? (
-          <Link className="main-nav-item" onClick={signOut} to="/">
-            <span>{profile.userName} </span>
-            <i className="fa fa-user-circle"></i>
-            Sign Out
-          </Link>
+          <>
+            <Link className="main-nav-item" to="/tableau-de-bord">
+              <i className="fa fa-user-circle"></i>
+              <span> {profile.userName} </span>
+            </Link>
+            <Link className="main-nav-item" onClick={signOut} to="/">
+              <i className="fa fa-sign-out"></i>
+              Sign Out
+            </Link>
+          </>
         ) : (
           <Link className="main-nav-item" to="/connection">
             <i className="fa fa-user-circle"></i>

@@ -9,8 +9,8 @@ function SignIn() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const main = document.querySelector("main");
-  main.classList.add("main", "bg-dark");
+  const main = document.querySelector("main"); //A changer
+  main.classList.add("main", "bg-dark"); //A changer
 
   async function loginUser(token) {
     const profile = await getUserProfile(token);

@@ -1,26 +1,33 @@
 import AccountStats from "../components/accountStats.jsx";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
+import EditUserName from "../components/editUserName.jsx";
+import UserHeader from "../components/userHeader.jsx";
+import { useState } from "react";
 
 function User() {
+  const [editForm, setEditForm] = useState(true);
   const { profile } = useSelector((state) => state.user);
   const { isAuthenticated } = useSelector((state) => state.user);
+
+  const main = document.querySelector("main"); //A changer
+  main.classList.add("main", "bg-dark"); //A changer
+
+  const toggleEditForm = () => {
+    setEditForm(!editForm);
+  };
 
   if (!isAuthenticated) {
     return <Navigate to="/" replace />;
   } else {
-    const main = document.querySelector("main");
-    main.classList.add("main", "bg-dark");
     return (
       <>
-        <div className="header">
-          <h1>
-            Welcome back
-            <br />
-            {profile.firstName} {profile.lastName}
-          </h1>
-          <button className="edit-button">Edit Name</button>
-        </div>
+        <UserHeader
+          open={editForm}
+          profile={profile}
+          toggleEdit={toggleEditForm}
+        />
+        <EditUserName closed={editForm} toggleEdit={toggleEditForm} />
         <h2 className="sr-only">Accounts</h2>
         <AccountStats
           title="Argent Bank Checking (x8349)"
