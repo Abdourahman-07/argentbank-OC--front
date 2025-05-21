@@ -27,23 +27,15 @@ function SignIn() {
     if (email === "" || password === "") {
       setErrorMessage("Veuillez remplir tous les champs");
     } else {
-      try {
-        const response = await getResponseLogin(email, password);
-        const token = response.body.token;
-        loginUser(token);
-      } catch (error) {
-        switch (error.message) {
-          case "Cannot read properties of undefined (reading 'token')":
-            setErrorMessage("Échec de l'authentification");
-            break;
-          case "response.body is undefined":
-            setErrorMessage("Échec de l'authentification");
-            break;
-          case "Failed to fetch":
-            setErrorMessage("La connexion a échoué");
-            break;
-          default:
-            setErrorMessage("Erreur inconnue");
+      const response = await getResponseLogin(email, password);
+      if (!response) {
+        setErrorMessage("Une erreur technique s'est produite");
+      } else {
+        if (response.status === 200) {
+          const token = response.body.token;
+          loginUser(token);
+        } else {
+          setErrorMessage("Identifiants non reconnus");
         }
       }
     }
