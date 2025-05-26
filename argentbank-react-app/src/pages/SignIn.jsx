@@ -14,9 +14,15 @@ function SignIn() {
 
   async function loginUser(token) {
     const profile = await getUserProfile(token);
-    dispatch(setToken(token));
-    dispatch(setProfile(profile.body));
-    navigate("/tableau-de-bord");
+    if (profile) {
+      dispatch(setToken(token));
+      dispatch(setProfile(profile.body));
+      navigate("/tableau-de-bord");
+    } else {
+      setErrorMessage(
+        "Une erreur technique s'est produite lors de la récupération du profil"
+      );
+    }
   }
 
   async function checkLoginUser(event) {
@@ -26,19 +32,19 @@ function SignIn() {
 
     if (email === "" || password === "") {
       setErrorMessage("Veuillez remplir tous les champs");
-    } else {
-      const response = await getResponseLogin(email, password);
-      if (!response) {
-        setErrorMessage("Une erreur technique s'est produite");
-      } else {
-        if (response.status === 200) {
-          const token = response.body.token;
-          loginUser(token);
-        } else {
-          setErrorMessage("Identifiants non reconnus");
-        }
-      }
+      return;
     }
+    const response = await getResponseLogin(email, password);
+    if (!response) {
+      setErrorMessage("Une erreur technique s'est produite");
+      return;
+    }
+    if (response.status !== 200) {
+      setErrorMessage("Identifiants non reconnus");
+      return;
+    }
+    const token = response.body.token;
+    loginUser(token);
   }
 
   return (
