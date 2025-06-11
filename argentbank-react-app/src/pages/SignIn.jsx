@@ -9,14 +9,12 @@ function SignIn() {
   const [errorMessage, setErrorMessage] = useState("");
   const navigate = useNavigate();
 
-  const main = document.querySelector("main"); //A changer
-  main.classList.add("main", "bg-dark"); //A changer
-
   async function loginUser(token) {
-    const profile = await getUserProfile(token);
-    if (profile) {
+    const response = await getUserProfile(token);
+    console.log("profile", response);
+    if (response.status === 200) {
       dispatch(setToken(token));
-      dispatch(setProfile(profile.body));
+      dispatch(setProfile(response.body));
       navigate("/tableau-de-bord");
     } else {
       setErrorMessage(

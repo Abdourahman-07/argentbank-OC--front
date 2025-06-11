@@ -4,9 +4,6 @@ import iconSecurity from "../img/icon-security.webp";
 import FeatureItem from "../components/featureItem";
 
 function Home() {
-  const main = document.querySelector("main"); //A changer
-  main.removeAttribute("class"); //A changer
-
   return (
     <>
       <div className="hero">

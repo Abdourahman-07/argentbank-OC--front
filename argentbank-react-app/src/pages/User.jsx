@@ -10,9 +10,6 @@ function User() {
   const { profile } = useSelector((state) => state.user);
   const { isAuthenticated } = useSelector((state) => state.user);
 
-  const main = document.querySelector("main"); //A changer
-  main.classList.add("main", "bg-dark"); //A changer
-
   const toggleEditForm = () => {
     setEditForm(!editForm);
   };
